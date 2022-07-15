@@ -11,3 +11,5 @@ gem 'docile', '~> 1.2.0'
 
 ## for ruby template wrappers
 gem 'cfer', '>= 0.6.0'
+
+gem 'rubocop', require: false

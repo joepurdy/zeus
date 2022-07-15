@@ -4,9 +4,7 @@
 
 module Stax
   class Stack < Base
-
     no_commands do
-
       ## your application name, will start all stack names
       # def app_name
       #   @_app_name ||= options[:app].empty? ? nil : cfn_safe(options[:app])
@@ -31,8 +29,6 @@ module Stax
       # def stack_force_changeset
       #   false
       # end
-
     end
-
   end
 end

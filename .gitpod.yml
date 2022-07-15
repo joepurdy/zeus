@@ -1,4 +1,4 @@
-# List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
+
 tasks:
   - name: Install Dependencies
     init: cd ops/ && bundle install
@@ -15,3 +15,7 @@ tasks:
       echo "eval $(gp env -e)" >> ~/.bashrc
 
       exit
+
+vscode:
+  extensions:
+    - rebornix.ruby
