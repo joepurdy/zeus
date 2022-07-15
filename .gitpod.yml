@@ -2,10 +2,12 @@
 tasks:
   - name: Install Pre-Requisites
     before: gem install stax
-    init: cd ops/ && bundle install
+    init: >
+      cd ops/ 
+      bundle install
     command: exit
   - name: Configure AWS EnvVars
-    command: |
+    command: >
       read -p "Enter AWS Access Key: " access_key
       read -p "Enter AWS Secret Key: " secret_key
 
