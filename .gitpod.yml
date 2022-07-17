@@ -4,17 +4,7 @@ tasks:
     init: cd ops/ && bundle install
     command: exit
   - name: Configure AWS EnvVars
-    command: >
-      read -p "Enter AWS Access Key: " access_key
-      read -p "Enter AWS Secret Key: " secret_key
-
-      gp env AWS_ACCESS_KEY_ID=$access_key
-      gp env AWS_SECRET_ACCESS_KEY=$secret_key
-      gp env AWS_REGION=us-west-2
-
-      echo "eval $(gp env -e)" >> ~/.bashrc
-
-      exit
+    command: ./.gitpod/scripts/awsenv.sh && exit
 
 vscode:
   extensions:
