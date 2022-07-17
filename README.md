@@ -11,10 +11,12 @@
   - [DB](#db)
 - [References](#references)
 - [Going further](#going-further)
+  - [Better understanding of cross-referencing resource values with Stax](#better-understanding-of-cross-referencing-resource-values-with-stax)
+  - [SSL certificate automation with ACM](#ssl-certificate-automation-with-acm)
 
 ## Background
 
-I opted to review and learn the basics of [https://github.com/rlister/stax](https://github.com/rlister/stax) and [https://github.com/seanedwards/cfer](https://github.com/seanedwards/cfer) to complete the homework. WHile I haven't used either prior, instead primarily using Terraform as my Infrastructure-as-Code tool of choice, I was curious how Arcadia's team managed AWS resources and wanted to learn something new in the process.
+I opted to review and learn the basics of [https://github.com/rlister/stax](https://github.com/rlister/stax) and [https://github.com/seanedwards/cfer](https://github.com/seanedwards/cfer) to complete the homework. While I haven't used either prior, instead primarily using Terraform as my Infrastructure-as-Code tool of choice, I was curious how Arcadia's team managed AWS resources and wanted to learn something new in the process.
 
 I used [Gitpod](https://www.gitpod.io/) as a development environment, however reviewers won't need to learn/use Gitpod to review my solution. Feel free to ignore the [.gitpod.yml](.gitpod.yml) file and the [.gitpod/](.gitpod/) directory as this config is specific to Gitpod and not a part of the config for the homework.
 
@@ -42,7 +44,7 @@ As mentioned previously you'll need to configure the AWS SDK, there's a number o
 # Configure environment variables for AWS SDK
 export AWS_ACCESS_KEY_ID=AKIA***************
 export AWS_SECRET_ACCESS_KEY=************************
-export AWS_REGION=us-west-2
+export AWS_REGION=us-east-1
 ```
 
 ## Architecture
@@ -62,8 +64,6 @@ The VPC stack is a straightforward AWS VPC for networked services from the App a
 
 For the App stack I've included resources for deploying a statically compiled JavaScript web app to S3 and using CloudFront as a CDN. Note: I didn't include any actual application code with the homework, it's assumed that the web frontend can be deployed as static HTML, CSS, and JS to the S3 bucket and served via CloudFront.
 
-I also included configuration for a Lambda service that would handle dynamic data retrieval, this is my "API" service so to speak that connects the static frontend with dynamic data (prior utility statements) from the database.
-
 ### DB
 
 The DB stack provisions DynamoDB and an additional S3 bucket. My thinking here is that the DynamoDB service will hold application metadata about customer utility statements which are stored as PDFs in the S3 bucket. 
@@ -78,4 +78,13 @@ These are a few resources/references I found helpful while completing the homewo
 
 ## Going further
 
-<!-- Place to include anything I'd do with more time/context -->
+### Better understanding of cross-referencing resource values with Stax
+
+Ran into a bunch of trouble trying to reference resources created in other blocks. Likely a simple learning curve to Stax/Cfer/CloudFormation. The error that finally did me in was `[FAIL] Template format error: Unresolved resource dependencies [WebBucketArn, WebBucketName] in the Resources block of the template`. I was trying to reference outputs from another resource and since that failed I just scratched the outputs all together and used `Fn::get_att()` instead.
+
+### SSL certificate automation with ACM
+
+I ended up altering my config not to use a custom domain afterall for the CloudFront distribution. I simply commented out the Alias config to leave it for reference. THe reason I backed this out was because to add an alternate domain to a CloudFront distribution you need to attach a SSL certificate and given the time limit and the complexity this would add for reviewers looking to provision my config in their own test accounts I opted to remove the custom domain bits.
+
+This could certainly be handled with ACM though if you were trying to do this for real with a dedicated domain.
+
