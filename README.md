@@ -56,6 +56,7 @@ aws ecr create-repository \
 
 aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
+docker pull public.ecr.aws/lambda/provided:al2
 docker tag public.ecr.aws/lambda/provided:al2 $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/zeus/lambda-api:latest
 
 docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/zeus/lambda-api:latest
