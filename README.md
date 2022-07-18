@@ -14,6 +14,7 @@
   - [Better understanding of cross-referencing resource values with Stax](#better-understanding-of-cross-referencing-resource-values-with-stax)
   - [SSL certificate automation with ACM](#ssl-certificate-automation-with-acm)
   - [Improve IAM roles/permissions](#improve-iam-rolespermissions)
+  - [Additional functions or a monolith API service](#additional-functions-or-a-monolith-api-service)
 
 ## Background
 
@@ -80,7 +81,9 @@ I've also included a Lambda function that would act as an API layer between the 
 
 ### DB
 
-The DB stack provisions DynamoDB and an additional S3 bucket. My thinking here is that the DynamoDB service will hold application metadata about customer accounts and utility statements while the generated PDFs will be stored in the S3 bucket and referenced by a key stored in DynamoDB. 
+The DB stack provisions two DynamoDB global tables (in a single region) and an additional S3 bucket. My thinking here is that the DynamoDB tables will hold application metadata about customer accounts and utility statements while the generated PDFs will be stored in the S3 bucket and referenced by a key stored in the DynamoDB statements table.
+
+Using global tables in a single region results in the same billing costs as provisioning a non-global table while allowing future scalabilty if needed by increasing replicas and adjusting autoscaling policies for reads and writes.
 
 ## References
 
@@ -94,6 +97,8 @@ These are a few resources/references I found helpful while completing the homewo
 - IAM JSON policy reference: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies.html
 
 ## Going further
+
+As I completed the homework I added some additional notes in the sections below describing some thoughts I had around ways to improve or expand on the solution given more time and context.
 
 ### Scaling the DynamoDB tables
 
@@ -116,3 +121,9 @@ I ended up altering my config not to use a custom domain for the CloudFront dist
 I've been using GCP (Google Cloud Platform) rather than AWS in my most recent role and my IAM knowledge is rusty. I used the reference docs to add role permissions to the lambda function from the app stack that I believe would grant read access to data stored in the DynamoDB and S3 resources provisioned in the db stack. That said, I suspect there's more to be done and/or improved on the IAM permissions. With more time and collaboration with a regular IAM practitioner I would likely improve the security controls for the resources managed.
 
 [github.com/rlister/divvy]: https://github.com/rlister/divvy
+
+### Additional functions or a monolith API service
+
+The current architecture only supplies permission to the lambda function for reading data from resources in the DB stack. Given the core prompt for the homework was to create infrastructure for "an AWS application that will allow a customer to look up their Arcadia Power utility statement through a web interface" I'd say read only access satisfies that. However, in a real-world scenario I'd assume we need additional infrastructure to handle writing new data and updating existing values.
+
+Depending on the full requirements of the application the lambda function aspect of the App stack could be expanded for additional functionality/functions or changed to a more monolithic API service to satisfy a broad range of requirements.
