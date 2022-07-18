@@ -6,7 +6,6 @@
 - [Installing / Getting started](#installing--getting-started)
   - [Initial Configuration](#initial-configuration)
 - [Architecture](#architecture)
-  - [VPC](#vpc)
   - [App](#app)
   - [DB](#db)
 - [References](#references)
@@ -66,14 +65,9 @@ docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/zeus/lambda-api:la
 
 I kept my solution minimal to both account for the timebox I was working with (I wanted to stay within 1-3 hours) and to allow for further discussion about how to scale or alter my solution during the team review interview that follows.
 
-My solution creates three CloudFormation stacks:
-- vpc
+My solution creates two CloudFormation stacks:
 - app
 - db
-
-### VPC
-
-The VPC stack is a straightforward AWS VPC for networked services from the App and DB stacks to communicate through. An Internet Gateway is attached to allow outgoing packets to the internet and VPC endpoints are created for private networking for S3 and DynamoDB from the DB stack.
 
 ### App
 
