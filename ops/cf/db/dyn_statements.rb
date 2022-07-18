@@ -1,4 +1,4 @@
-resource :DynStatements, 'AWS::DynamoDB::Table' do
+resource :DynStatements, 'AWS::DynamoDB::GlobalTable' do
   attribute_definitions [
     { AttributeName: :id, AttributeType: :S },
     { AttributeName: :accountId, AttributeType: :S },
@@ -17,20 +17,63 @@ resource :DynStatements, 'AWS::DynamoDB::Table' do
       Projection: {
         ProjectionType: :KEYS_ONLY,
       },
-      ProvisionedThroughput: {
-        ReadCapacityUnits: 5,
-        WriteCapacityUnits: 5,
+      WriteProvisionedThroughputSettings: {
+        WriteCapacityAutoScalingSettings: {
+          MaxCapacity: 5,
+          MinCapacity: 1,
+          TargetTrackingScalingPolicyConfiguration: {
+            TargetValue: 70.0
+          }
+        }
       }
     }
   ]
-  provisioned_throughput do
-    read_capacity_units 5
-    write_capacity_units 5
+  replicas [
+    {
+      Region: 'us-east-1',
+      GlobalSecondaryIndexes: [
+        {
+          IndexName: :by_blobKey,
+          ReadProvisionedThroughputSettings: {
+            ReadCapacityAutoScalingSettings: {
+              MaxCapacity: 5,
+              MinCapacity: 1,
+              TargetTrackingScalingPolicyConfiguration: {
+                TargetValue: 70.0
+              }
+            }
+          }
+        }
+      ],
+      ReadProvisionedThroughputSettings: {
+        ReadCapacityAutoScalingSettings: {
+          MaxCapacity: 5,
+          MinCapacity: 1,
+          TargetTrackingScalingPolicyConfiguration: {
+            TargetValue: 70.0
+          }
+        }
+      },
+      Tags: [
+        {
+          Key: 'Stack',
+          Value: Fn::ref('AWS::StackName')
+        }
+      ]
+    }
+  ]
+  SSE_specification do
+    SSEEnabled true
   end
-  SSE_specification(
-    SSEEnabled: true
-  )
-  tag :Stack, Fn::ref('AWS::StackName')
+  WriteProvisionedThroughputSettings do
+    WriteCapacityAutoScalingSettings do
+      MaxCapacity 5
+      MinCapacity 1
+      TargetTrackingScalingPolicyConfiguration do
+        TargetValue 70.0
+      end
+    end
+  end
 end
 
 output :DynStatements,    Fn::ref(:DynStatements),           export: Fn::sub('${AWS::StackName}-DynStatements')
