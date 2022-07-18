@@ -67,7 +67,7 @@ For the App stack I've included resources for deploying a statically compiled Ja
 
 ### DB
 
-The DB stack provisions DynamoDB and an additional S3 bucket. My thinking here is that the DynamoDB service will hold application metadata about customer utility statements which are stored as PDFs in the S3 bucket. 
+The DB stack provisions DynamoDB and an additional S3 bucket. My thinking here is that the DynamoDB service will hold application metadata about customer accounts and utility statements while the generated PDFs will be stored in the S3 bucket and referenced by a key stored in DynamoDB. 
 
 ## References
 
