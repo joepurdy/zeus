@@ -45,7 +45,20 @@ As mentioned previously you'll need to configure the AWS SDK, there's a number o
 # Configure environment variables for AWS SDK
 export AWS_ACCESS_KEY_ID=AKIA***************
 export AWS_SECRET_ACCESS_KEY=************************
+export AWS_ACCOUNT_ID=1234**********
 export AWS_REGION=us-east-1
+```
+
+You'll also need to create an ECR repository with a container image for the lambda function and push an image:
+```shell
+aws ecr create-repository \
+  --repository-name zeus/lambda-api
+
+aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+docker tag public.ecr.aws/lambda/provided:al2 $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/zeus/lambda-api:latest
+
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/zeus/lambda-api:latest
 ```
 
 ## Architecture
@@ -64,6 +77,8 @@ The VPC stack is a straightforward AWS VPC for networked services from the App a
 ### App
 
 For the App stack I've included resources for deploying a statically compiled JavaScript web app to S3 and using CloudFront as a CDN. Note: I didn't include any actual application code with the homework, it's assumed that the web frontend can be deployed as static HTML, CSS, and JS to the S3 bucket and served via CloudFront.
+
+I've also included a Lambda function that would act as an API layer between the web frontend and the DynamoDB and S3 resources from the database stack.
 
 ### DB
 
