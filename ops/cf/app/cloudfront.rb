@@ -39,7 +39,7 @@ resource :CloudfrontDistribution, 'AWS::CloudFront::Distribution', DependsOn: [:
         DomainName: Fn::get_att(:WebS3, :DomainName),
         Id: Fn::get_att(:WebS3, :Arn),
         S3OriginConfig: {
-          OriginAccessIdentity: Fn::Sub('origin-access-identity/cloudfront/${CloudfrontOAI}')
+          OriginAccessIdentity: Fn::sub('origin-access-identity/cloudfront/${CloudfrontOAI}')
         }
       }
     ]
