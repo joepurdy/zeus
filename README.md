@@ -11,6 +11,7 @@
   - [DB](#db)
 - [References](#references)
 - [Going further](#going-further)
+  - [Scaling the DynamoDB tables](#scaling-the-dynamodb-tables)
   - [Better understanding of cross-referencing resource values with Stax](#better-understanding-of-cross-referencing-resource-values-with-stax)
   - [SSL certificate automation with ACM](#ssl-certificate-automation-with-acm)
 
@@ -77,6 +78,12 @@ These are a few resources/references I found helpful while completing the homewo
 - AWS CloudFormation Template Reference: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-reference.html
 
 ## Going further
+
+### Scaling the DynamoDB tables
+
+I opted to use a single region/replica DynamoDB Global Tables to allow future updates to scale the tables across multiple regions or multiple replicas as needed. This allows for flexible updates when/if there's a need for increased performance or redundency.
+
+The tables also use autoscaling policies for Read and Write throughput giving additional knobs to tune when/if the time comes.
 
 ### Better understanding of cross-referencing resource values with Stax
 
