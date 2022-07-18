@@ -1,5 +1,4 @@
 require 'stax/examples'
 
-stack :vpc
 stack :app
 stack :db, include: %w[DynamoDB]
