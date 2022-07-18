@@ -2,7 +2,7 @@
 tasks:
   - name: Install Dependencies
     init: cd ops/ && bundle install
-    command: >
+    command: |
       echo "waiting for aws-env step to finish..."
       gp sync-await aws-env
       echo "done!"
@@ -12,12 +12,12 @@ tasks:
       gp sync-done aws-cli
       exit
   - name: Configure AWS EnvVars
-    command: >
+    command: |
       ./.gitpod/scripts/awsenv.sh 
       gp sync-done aws-env
       exit
   - name: Initialize ECR repository
-    command: >
+    command: |
       echo "waiting for aws-cli step to finish..."
       gp sync-await aws-cli
       echo "done!"
@@ -41,7 +41,7 @@ tasks:
       exit
 
   - name: Create Infrastructure
-    command: >
+    command: |
       echo "waiting for aws-ecr step to finish..."
       gp sync-await aws-ecr
       echo "done!"
