@@ -72,8 +72,8 @@ The DB stack provisions DynamoDB and an additional S3 bucket. My thinking here i
 
 These are a few resources/references I found helpful while completing the homework:
 
-- Stax: https://github.com/rlister/stax
-- Cfer: https://github.com/seanedwards/cfer
+- [github.com/rlister/stax](https://github.com/rlister/stax)
+- [github.com/seanedwards/cfer](https://github.com/seanedwards/cfer)
 - AWS CloudFormation Template Reference: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-reference.html
 
 ## Going further
