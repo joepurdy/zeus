@@ -2,9 +2,56 @@
 tasks:
   - name: Install Dependencies
     init: cd ops/ && bundle install
-    command: exit
+    command: >
+      echo "waiting for aws-env step to finish..."
+      gp sync-await aws-env
+      echo "done!"
+
+      ./.gitpod/scripts/awscli.sh
+      
+      gp sync-done aws-cli
+      exit
   - name: Configure AWS EnvVars
-    command: ./.gitpod/scripts/awsenv.sh && exit
+    command: >
+      ./.gitpod/scripts/awsenv.sh 
+      gp sync-done aws-env
+      exit
+  - name: Initialize ECR repository
+    command: >
+      echo "waiting for aws-cli step to finish..."
+      gp sync-await aws-cli
+      echo "done!"
+
+      eval $(gp env -e)
+
+      aws ecr create-repository \
+        --repository-name zeus/lambda-api
+
+      aws ecr get-login-password \
+        --region $AWS_REGION |\ 
+        docker login --username AWS --password-stdin \
+          $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+
+      docker tag public.ecr.aws/lambda/provided:al2 $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/zeus/lambda-api:latest
+
+      docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/zeus/lambda-api:latest
+
+      gp sync-done aws-ecr
+
+      exit
+
+  - name: Create Infrastructure
+    command: >
+      echo "waiting for aws-ecr step to finish..."
+      gp sync-await aws-ecr
+      echo "done!"
+
+      eval $(gp env -e)
+
+      cd ops/
+
+      bundle exec stax create
+
 
 vscode:
   extensions:
