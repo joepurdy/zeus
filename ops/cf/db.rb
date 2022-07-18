@@ -1,5 +1,6 @@
 description 'db stack'
 
-# parameter :foo, type: :String, default: ''
-
-include_template 'db/dyn_statements.rb'
+include_template(
+    'db/dyn_accounts.rb',
+    'db/dyn_statements.rb'
+)
