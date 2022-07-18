@@ -1,4 +1,4 @@
 require 'stax/examples'
 
-stack :app
 stack :db, include: %w[DynamoDB]
+stack :app, import: :db

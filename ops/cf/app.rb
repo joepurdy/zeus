@@ -1,5 +1,8 @@
 description 'app stack'
 
+## stack dependencies
+parameter :db, type: :String
+
 ## DNS domains for route53
 parameter :domain, type: :String, default: 'hjkl.cloud'
 parameter :subdomain, type: :String, default: 'zeus'

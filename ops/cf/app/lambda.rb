@@ -24,4 +24,41 @@ resource :iamlambda, 'AWS::IAM::Role' do
       'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
     ]
   )
+  policies(
+    [
+      {
+        PolicyName: 'LambdaDynamoDB',
+        PolicyDocument: {
+          Version: '2012-10-17',
+          Statement: [
+            {
+              Effect: 'Allow',
+              Resource: [
+                Fn::import_value(Fn::sub('${db}-DynAccountsArn')),
+                Fn::import_value(Fn::sub('${db}-DynStatementsArn'))
+              ],
+              Action: [
+                'dynamodb:GetItem'
+              ]
+            }
+          ]
+        }
+      },
+      {
+        PolicyName: 'LambdaStatementS3',
+        PolicyDocument: {
+          Version: '2012-10-17',
+          Statement: [
+            {
+              Effect: 'Allow',
+              Resource: Fn::import_value(Fn::sub('${db}-StatementS3Arn')),
+              Action: [
+                's3:GetObject'
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  )
 end
