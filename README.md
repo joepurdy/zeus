@@ -2,6 +2,7 @@
 
 ## Table of Contents <!-- omit from toc -->
 
+- [Video Overview](#video-overview)
 - [Background](#background)
 - [Installing / Getting started](#installing--getting-started)
   - [Initial Configuration](#initial-configuration)
@@ -15,6 +16,12 @@
   - [SSL certificate automation with ACM](#ssl-certificate-automation-with-acm)
   - [Improve IAM roles/permissions](#improve-iam-rolespermissions)
   - [Additional functions or a monolith API service](#additional-functions-or-a-monolith-api-service)
+
+## Video Overview
+
+If you want to watch an 8 minute video showing a demonstration of my homework solution I have one recorded here: [joepurdy/zeus — video overview](https://www.loom.com/share/4b19bf6234964b3d869b67c5057cd6da)
+
+It's completely optional and merely provided to aid in reviewing the solution and seeing a practical demonstration.
 
 ## Background
 
